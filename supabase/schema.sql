@@ -96,19 +96,9 @@ with check (
   and member_id = (select member_id from public.profiles where id = auth.uid())
 );
 
-create policy "council update own vote"
-on public.votes
-for update
-using (
-  auth.uid() = user_id
-  and public.current_role() = 'council'
-  and member_id = (select member_id from public.profiles where id = auth.uid())
-)
-with check (
-  auth.uid() = user_id
-  and public.current_role() = 'council'
-  and member_id = (select member_id from public.profiles where id = auth.uid())
-);
+alter publication supabase_realtime add table public.council_members;
+alter publication supabase_realtime add table public.vote_sessions;
+alter publication supabase_realtime add table public.votes;
 
 insert into public.council_members (id, name, image)
 values

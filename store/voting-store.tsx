@@ -42,6 +42,20 @@ interface VotingContextValue extends VotingState {
 
 const VotingContext = createContext<VotingContextValue | null>(null);
 
+function getFriendlyVoteError(message: string) {
+  const normalized = message.toLowerCase();
+
+  if (
+    normalized.includes("row-level security") ||
+    normalized.includes("duplicate key") ||
+    normalized.includes("violates unique constraint")
+  ) {
+    return "Usted ya emitio su voto y no puede modificarlo.";
+  }
+
+  return message;
+}
+
 function toState(snapshot: VotingSnapshot): VotingState {
   return {
     members: snapshot.members,
@@ -109,6 +123,16 @@ export function VotingStoreProvider({
       void supabase.removeChannel(channel);
     };
   }, [refresh, supabase]);
+
+  useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      startTransition(() => void refresh());
+    }, 2000);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, [refresh]);
 
   const value = useMemo<VotingContextValue>(
     () => ({
@@ -185,6 +209,16 @@ export function VotingStoreProvider({
           return;
         }
 
+        const alreadyVoted = state.records.some((record) => record.memberId === memberId);
+
+        if (alreadyVoted) {
+          setState((current) => ({
+            ...current,
+            error: "Tu voto ya fue registrado y no puede modificarse.",
+          }));
+          return;
+        }
+
         const {
           data: { user },
         } = await supabase.auth.getUser();
@@ -194,19 +228,19 @@ export function VotingStoreProvider({
           return;
         }
 
-        const { error } = await supabase.from("votes").upsert(
-          {
-            session_id: state.currentVote.id,
-            member_id: memberId,
-            user_id: user.id,
-            decision,
-            updated_at: new Date().toISOString(),
-          },
-          { onConflict: "session_id,member_id" },
-        );
+        const { error } = await supabase.from("votes").insert({
+          session_id: state.currentVote.id,
+          member_id: memberId,
+          user_id: user.id,
+          decision,
+          updated_at: new Date().toISOString(),
+        });
 
         if (error) {
-          setState((current) => ({ ...current, error: error.message }));
+          setState((current) => ({
+            ...current,
+            error: getFriendlyVoteError(error.message),
+          }));
           return;
         }
 

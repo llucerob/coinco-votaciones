@@ -1,6 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
+import { signOut } from "@/app/auth/actions";
 import { useVotingStore } from "@/store/voting-store";
 import type { VoteDecision } from "@/types";
 
@@ -32,8 +33,13 @@ export default function VotePanel({
   const { currentVote, castVote, records, error, clearError } = useVotingStore();
   const [isPending, startTransition] = useTransition();
   const current = records.find((record) => record.memberId === memberId);
+  const voteLocked = Boolean(current);
 
   const submitVote = (decision: VoteDecision) => {
+    if (voteLocked) {
+      return;
+    }
+
     startTransition(async () => {
       clearError();
       await castVote(memberId, decision);
@@ -46,6 +52,19 @@ export default function VotePanel({
         compact ? "p-8 md:p-10" : "p-6"
       }`}
     >
+      {compact ? (
+        <div className="mb-6 flex justify-end">
+          <form action={signOut}>
+            <button
+              type="submit"
+              className="rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-white/80 transition hover:border-white/30 hover:text-white"
+            >
+              Salir
+            </button>
+          </form>
+        </div>
+      ) : null}
+
       <div>
         {!compact ? (
           <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-muted)]">
@@ -83,7 +102,7 @@ export default function VotePanel({
                 key={option.value}
                 type="button"
                 onClick={() => submitVote(option.value)}
-                disabled={isPending}
+                disabled={isPending || voteLocked}
                 className={`rounded-[22px] border text-left transition disabled:opacity-60 ${
                   compact ? "px-6 py-6" : "px-5 py-4"
                 } ${
@@ -95,7 +114,11 @@ export default function VotePanel({
                 <div className={`${compact ? "text-2xl" : "text-lg"} font-semibold`}>{option.label}</div>
                 {!compact ? (
                   <div className="mt-1 text-sm opacity-80">
-                    {selected ? "Seleccion actual" : "Registrar este voto"}
+                    {selected
+                      ? "Voto registrado"
+                      : voteLocked
+                        ? "Votacion cerrada para tu usuario"
+                        : "Registrar este voto"}
                   </div>
                 ) : null}
               </button>
@@ -103,6 +126,10 @@ export default function VotePanel({
           })}
         </div>
       )}
+
+      {current && compact ? (
+        <p className="mt-6 text-center text-base text-white/75">Tu voto ya fue registrado.</p>
+      ) : null}
 
       {current && !compact ? (
         <p className="mt-6 text-sm text-white/70">
