@@ -4,6 +4,11 @@
 import { useState, useTransition } from "react";
 import { useVotingStore } from "@/store/voting-store";
 
+interface MemberDraft {
+  name: string;
+  image: string;
+}
+
 export default function AdminPanel() {
   const {
     members,
@@ -19,12 +24,46 @@ export default function AdminPanel() {
   } = useVotingStore();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [memberDrafts, setMemberDrafts] = useState<Record<string, MemberDraft>>({});
   const [isPending, startTransition] = useTransition();
 
   const run = (callback: () => Promise<void>) => {
     startTransition(async () => {
       clearError();
       await callback();
+    });
+  };
+
+  const updateDraft = (memberId: string, field: keyof MemberDraft, value: string) => {
+    setMemberDrafts((current) => ({
+      ...current,
+      [memberId]: {
+        name: current[memberId]?.name ?? "",
+        image: current[memberId]?.image ?? "",
+        [field]: value,
+      },
+    }));
+  };
+
+  const saveMember = (memberId: string) => {
+    const member = members.find((item) => item.id === memberId);
+    const draft = memberDrafts[memberId];
+
+    if (!member) {
+      return;
+    }
+
+    run(() =>
+      updateMember(memberId, {
+        name: (draft?.name ?? member.name).trim(),
+        image: (draft?.image ?? member.image).trim(),
+      }),
+    );
+
+    setMemberDrafts((current) => {
+      const next = { ...current };
+      delete next[memberId];
+      return next;
     });
   };
 
@@ -112,7 +151,7 @@ export default function AdminPanel() {
           {members.map((member) => (
             <article
               key={member.id}
-              className="grid gap-4 rounded-[26px] border border-white/10 bg-black/20 p-4 md:grid-cols-[120px_1fr_1fr]"
+              className="grid gap-4 rounded-[26px] border border-white/10 bg-black/20 p-4 md:grid-cols-[120px_1fr_1fr_auto]"
             >
               <img
                 src={member.image}
@@ -122,20 +161,30 @@ export default function AdminPanel() {
               <label className="grid gap-2">
                 <span className="text-sm text-white/65">Nombre</span>
                 <input
-                  value={member.name}
-                  onChange={(event) => run(() => updateMember(member.id, { name: event.target.value }))}
+                  value={memberDrafts[member.id]?.name ?? member.name}
+                  onChange={(event) => updateDraft(member.id, "name", event.target.value)}
                   className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-[var(--color-accent)]"
                 />
               </label>
               <label className="grid gap-2">
                 <span className="text-sm text-white/65">Imagen</span>
                 <input
-                  value={member.image}
-                  onChange={(event) => run(() => updateMember(member.id, { image: event.target.value }))}
+                  value={memberDrafts[member.id]?.image ?? member.image}
+                  onChange={(event) => updateDraft(member.id, "image", event.target.value)}
                   placeholder="URL de imagen"
                   className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-[var(--color-accent)]"
                 />
               </label>
+              <div className="flex items-end">
+                <button
+                  type="button"
+                  onClick={() => saveMember(member.id)}
+                  disabled={isPending}
+                  className="w-full rounded-2xl border border-[var(--color-accent)] px-4 py-3 text-sm font-semibold text-[var(--color-accent-soft)] transition hover:bg-[rgba(143,214,194,0.12)] disabled:opacity-60 md:w-auto"
+                >
+                  Guardar
+                </button>
+              </div>
             </article>
           ))}
         </div>
