@@ -1,0 +1,145 @@
+/* eslint-disable @next/next/no-img-element */
+"use client";
+
+import { useState, useTransition } from "react";
+import { useVotingStore } from "@/store/voting-store";
+
+export default function AdminPanel() {
+  const {
+    members,
+    openVote,
+    closeVote,
+    resetVotes,
+    updateMember,
+    currentVote,
+    records,
+    error,
+    clearError,
+    syncing,
+  } = useVotingStore();
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [isPending, startTransition] = useTransition();
+
+  const run = (callback: () => Promise<void>) => {
+    startTransition(async () => {
+      clearError();
+      await callback();
+    });
+  };
+
+  return (
+    <div className="grid gap-8">
+      <section className="rounded-[32px] border border-white/10 bg-[rgba(255,255,255,0.06)] p-6 shadow-[0_24px_60px_rgba(0,0,0,0.2)]">
+        <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
+          <div>
+            <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-muted)]">
+              Control de sesion
+            </p>
+            <h2 className="mt-2 text-3xl font-semibold text-white">Configurar votacion</h2>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/70">
+            Estado: <span className="font-semibold text-white">{currentVote.isOpen ? "Abierta" : "Cerrada"}</span>
+            <span className="mx-2 text-white/20">|</span>
+            Votos emitidos: <span className="font-semibold text-white">{records.length}</span>
+            <span className="mx-2 text-white/20">|</span>
+            Sync: <span className="font-semibold text-white">{syncing ? "Sincronizando" : "Activa"}</span>
+          </div>
+        </div>
+
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          <label className="grid gap-2">
+            <span className="text-sm text-white/70">Titulo</span>
+            <input
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
+              placeholder="Ej. Votacion presupuesto municipal"
+              className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-[var(--color-accent)]"
+            />
+          </label>
+          <label className="grid gap-2">
+            <span className="text-sm text-white/70">Descripcion</span>
+            <input
+              value={description}
+              onChange={(event) => setDescription(event.target.value)}
+              placeholder="Tema o resumen de la sesion"
+              className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-[var(--color-accent)]"
+            />
+          </label>
+        </div>
+
+        {error ? (
+          <div className="mt-5 rounded-2xl border border-rose-400/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-100">
+            {error}
+          </div>
+        ) : null}
+
+        <div className="mt-6 flex flex-wrap gap-3">
+          <button
+            type="button"
+            onClick={() => run(() => openVote(title || "Nueva votacion", description))}
+            disabled={isPending}
+            className="rounded-2xl bg-[var(--color-accent)] px-5 py-3 font-semibold text-[#0a1117] transition hover:brightness-110 disabled:opacity-60"
+          >
+            Abrir votacion
+          </button>
+          <button
+            type="button"
+            onClick={() => run(closeVote)}
+            disabled={isPending}
+            className="rounded-2xl bg-amber-300 px-5 py-3 font-semibold text-[#1f1600] transition hover:brightness-110 disabled:opacity-60"
+          >
+            Cerrar votacion
+          </button>
+          <button
+            type="button"
+            onClick={() => run(resetVotes)}
+            disabled={isPending}
+            className="rounded-2xl bg-rose-500 px-5 py-3 font-semibold text-white transition hover:brightness-110 disabled:opacity-60"
+          >
+            Reiniciar votos
+          </button>
+        </div>
+      </section>
+
+      <section className="rounded-[32px] border border-white/10 bg-[rgba(255,255,255,0.06)] p-6 shadow-[0_24px_60px_rgba(0,0,0,0.2)]">
+        <div>
+          <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-muted)]">Padron visual</p>
+          <h2 className="mt-2 text-3xl font-semibold text-white">Editar integrantes</h2>
+        </div>
+
+        <div className="mt-6 grid gap-4">
+          {members.map((member) => (
+            <article
+              key={member.id}
+              className="grid gap-4 rounded-[26px] border border-white/10 bg-black/20 p-4 md:grid-cols-[120px_1fr_1fr]"
+            >
+              <img
+                src={member.image}
+                alt={member.name}
+                className="h-24 w-24 rounded-2xl border border-white/10 object-cover"
+              />
+              <label className="grid gap-2">
+                <span className="text-sm text-white/65">Nombre</span>
+                <input
+                  value={member.name}
+                  onChange={(event) => run(() => updateMember(member.id, { name: event.target.value }))}
+                  className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-[var(--color-accent)]"
+                />
+              </label>
+              <label className="grid gap-2">
+                <span className="text-sm text-white/65">Imagen</span>
+                <input
+                  value={member.image}
+                  onChange={(event) => run(() => updateMember(member.id, { image: event.target.value }))}
+                  placeholder="URL de imagen"
+                  className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-[var(--color-accent)]"
+                />
+              </label>
+            </article>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
