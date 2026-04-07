@@ -100,12 +100,12 @@ function PresidentCard({
   };
 }) {
   return (
-    <div className="rounded-[24px] border border-white/10 bg-[#003169] p-3 text-center shadow-[0_18px_40px_rgba(0,0,0,0.22)] backdrop-blur-md">
+    <div className="rounded-[24px] border border-white/10 bg-[#003169] p-3 text-center shadow-[0_18px_40px_rgba(0,0,0,0.22)]">
       <p className="text-[11px] uppercase tracking-[0.2em] text-[var(--color-muted)]">Presidencia</p>
       <img
         src={member.image}
         alt={member.name}
-        className="mx-auto mt-3 h-24 w-24 rounded-[20px] border border-white/15 object-cover"
+        className="mx-auto mt-3 h-28 w-28 rounded-[22px] border border-white/15 object-cover"
       />
       <h3 className="mt-3 text-base font-semibold leading-tight text-white">{member.name}</h3>
       <div className="mt-3">
