@@ -55,7 +55,7 @@ export default function ObsResults() {
         </div>
 
         {president ? (
-          <div className="mt-4 rounded-[26px] border border-white/10 bg-[rgba(8,13,18,0.44)] p-4 shadow-[0_20px_50px_rgba(0,0,0,0.24)] backdrop-blur-md">
+          <div className="mt-4 rounded-[26px] border border-white/15 bg-[rgba(18,28,36,0.28)] p-4 shadow-[0_20px_50px_rgba(0,0,0,0.24)] backdrop-blur-xl">
             <p className="text-sm uppercase tracking-[0.28em] text-[var(--color-muted)]">
               Resumen de la votacion
             </p>
