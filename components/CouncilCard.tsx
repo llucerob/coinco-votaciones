@@ -11,8 +11,8 @@ const labelMap: Record<VoteDecision, string> = {
 
 const classMap: Record<VoteDecision, string> = {
   APRUEBO: "border-[#00A97A] bg-[#00A97A] text-white",
-  RECHAZO: "border-[#00A97A] bg-[#00A97A] text-white",
-  ABSTENCION: "border-[#00A97A] bg-[#00A97A] text-white",
+  RECHAZO: "border-[#FF4153] bg-[#FF4153] text-white",
+  ABSTENCION: "border-[#FFBB2F] bg-[#FFBB2F] text-[#1d1300]",
   SIN_VOTO: "border-white/10 bg-white/5 text-white/70",
 };
 
