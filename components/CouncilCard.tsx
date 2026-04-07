@@ -24,16 +24,16 @@ export default function CouncilCard({
   decision: VoteDecision;
 }) {
   return (
-    <article className="rounded-[28px] border border-white/10 bg-[rgba(255,255,255,0.06)] p-4 text-center shadow-[0_22px_50px_rgba(0,0,0,0.22)]">
+    <article className="rounded-[24px] border border-white/10 bg-[rgba(7,12,18,0.56)] p-3 text-center shadow-[0_18px_40px_rgba(0,0,0,0.22)] backdrop-blur-md">
       <img
         src={member.image}
         alt={member.name}
-        className="mx-auto mb-4 h-28 w-28 rounded-[22px] border border-white/15 object-cover"
+        className="mx-auto mb-3 h-20 w-20 rounded-[18px] border border-white/15 object-cover"
       />
-      <h3 className="flex min-h-14 items-center justify-center text-lg font-semibold text-white">
+      <h3 className="flex min-h-12 items-center justify-center text-base font-semibold leading-tight text-white">
         {member.name}
       </h3>
-      <div className={`mt-4 rounded-2xl border px-4 py-3 text-sm font-bold uppercase tracking-[0.18em] ${classMap[decision]}`}>
+      <div className={`mt-3 rounded-xl border px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] ${classMap[decision]}`}>
         {labelMap[decision]}
       </div>
     </article>
