@@ -125,8 +125,7 @@ export default function AuthForm({
       </button>
 
       <p className="mt-5 text-sm leading-6 text-white/60">
-        Las cuentas nuevas no reciben permisos automaticamente. Debes asociar el usuario a un perfil
-        en Supabase para habilitar acceso de administrador o integrante.
+        Luego de crear la cuenta, debe esperar a que el administrador asocie su cuenta al sistema.
       </p>
 
       <Link href="/" className="mt-4 inline-block text-sm text-[var(--color-accent-soft)]">

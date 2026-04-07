@@ -27,12 +27,9 @@ export default async function AuthPage({
               Acceso protegido
             </p>
             <h1 className="mt-4 max-w-3xl font-serif text-5xl leading-tight text-white md:text-7xl">
-              Autenticacion con Supabase
+              Autentificación obligatoria
             </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-white/70">
-              El panel de administracion y los accesos de los 7 integrantes ahora validan sesion y
-              rol. Los resultados publicos en OBS siguen disponibles sin login.
-            </p>
+            
           </section>
 
           <AuthForm nextPath={nextPath} initialError={params.error} />
