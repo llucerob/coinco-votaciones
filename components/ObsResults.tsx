@@ -62,7 +62,7 @@ export default function ObsResults() {
               <StatCard label="Apruebo" value={summary.apruebo} tone="emerald" />
               <StatCard label="Rechazo" value={summary.rechazo} tone="rose" />
               <StatCard label="Abstencion" value={summary.abstencion} tone="amber" />
-              <StatCard label="Sin voto" value={summary.sinVoto} tone="neutral" />
+              <StatCard label="Ausente o Sin Voto" value={summary.sinVoto} tone="neutral" />
             </div>
           </div>
         </div>
@@ -92,7 +92,7 @@ function PresidentCard({
     APRUEBO: "Apruebo",
     RECHAZO: "Rechazo",
     ABSTENCION: "Abstencion",
-    SIN_VOTO: "Ausente o Sin Voto",
+    SIN_VOTO: "Sin Voto",
   } satisfies Record<VoteDecision, string>;
 
   return (
