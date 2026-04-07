@@ -45,7 +45,7 @@ export default function ObsResults() {
   return (
     <main className="min-h-screen bg-transparent px-4 py-4 md:px-6">
       <div className="mx-auto flex min-h-[650px] w-full max-w-[1180px] flex-col justify-between">
-        <div className="max-w-4xl rounded-[26px] border border-white/10 bg-[rgba(8,13,18,0.42)] px-5 py-4 shadow-[0_18px_50px_rgba(0,0,0,0.24)] backdrop-blur-md">
+        <div className="max-w-4xl rounded-[26px] border border-white/12 bg-[rgba(8,13,18,0.74)] px-5 py-4 shadow-[0_18px_50px_rgba(0,0,0,0.24)] backdrop-blur-md">
           <p className="text-sm uppercase tracking-[0.4em] text-[var(--color-muted)]">
             Concejo Municipal de Coinco
           </p>
@@ -70,7 +70,7 @@ export default function ObsResults() {
         {president ? (
           <div className="mt-4 grid gap-4 xl:grid-cols-[240px_1fr]">
             <PresidentCard member={president} />
-            <div className="rounded-[24px] border border-white/15 bg-[rgba(18,28,36,0.28)] p-4 shadow-[0_20px_50px_rgba(0,0,0,0.24)] backdrop-blur-xl">
+            <div className="rounded-[24px] border border-white/15 bg-[rgba(18,28,36,0.74)] p-4 shadow-[0_20px_50px_rgba(0,0,0,0.24)] backdrop-blur-xl">
               <p className="text-sm uppercase tracking-[0.28em] text-[var(--color-muted)]">
                 Resumen de la votacion
               </p>
