@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useTransition } from "react";
 import { signOut } from "@/app/auth/actions";
 import { useVotingStore } from "@/store/voting-store";
@@ -54,14 +55,27 @@ export default function VotePanel({
     >
       {compact ? (
         <div className="mb-6 flex justify-end">
-          <form action={signOut}>
-            <button
-              type="submit"
-              className="rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-white/80 transition hover:border-white/30 hover:text-white"
-            >
-              Salir
-            </button>
-          </form>
+          <details className="group relative">
+            <summary className="list-none rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-white/80 transition hover:border-white/30 hover:text-white">
+              Cuenta
+            </summary>
+            <div className="absolute right-0 z-20 mt-3 w-52 rounded-2xl border border-white/10 bg-[rgba(8,13,18,0.88)] p-2 shadow-[0_20px_40px_rgba(0,0,0,0.28)] backdrop-blur-xl">
+              <Link
+                href="/auth/change-password"
+                className="block rounded-xl px-4 py-3 text-sm text-white/80 transition hover:bg-white/8 hover:text-white"
+              >
+                Cambiar contrasena
+              </Link>
+              <form action={signOut}>
+                <button
+                  type="submit"
+                  className="block w-full rounded-xl px-4 py-3 text-left text-sm text-white/80 transition hover:bg-white/8 hover:text-white"
+                >
+                  Salir
+                </button>
+              </form>
+            </div>
+          </details>
         </div>
       ) : null}
 
