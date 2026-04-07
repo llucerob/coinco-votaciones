@@ -191,7 +191,7 @@ export function VotingStoreProvider({
         const insertVote = await supabase.from("vote_sessions").insert({
           session_number: sessionNumber.trim() || null,
           title: title.trim() || "Nueva votacion",
-          description: description?.trim() || "Sin descripcion adicional.",
+          description: description?.trim() || null,
           is_open: true,
         });
 

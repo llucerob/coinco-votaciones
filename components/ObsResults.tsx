@@ -46,7 +46,7 @@ export default function ObsResults() {
   return (
     <main className="min-h-screen bg-transparent px-4 py-4 md:px-6">
       <div className="mx-auto flex min-h-[650px] w-full max-w-[1180px] flex-col justify-between">
-        <div className="max-w-4xl rounded-[26px] border border-white/12 bg-[#003169] px-5 py-4 shadow-[0_18px_50px_rgba(0,0,0,0.24)]">
+        <div className="max-w-full rounded-[26px] border border-white/12 bg-[#003169] px-5 py-4 shadow-[0_18px_50px_rgba(0,0,0,0.24)]">
           <p className="text-sm uppercase tracking-[0.4em] text-[var(--color-muted)]">
             {currentVote.sessionNumber
               ? `Sesion ${currentVote.sessionNumber} I. Municipalidad de Coinco`
