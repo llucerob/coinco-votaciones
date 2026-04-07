@@ -35,7 +35,7 @@ interface VotingContextValue extends VotingState {
   clearError: () => void;
   updateMember: (id: string, payload: Partial<CouncilMember>) => Promise<void>;
   uploadMemberImage: (id: string, file: File) => Promise<void>;
-  openVote: (title: string, description?: string) => Promise<void>;
+  openVote: (sessionNumber: string, title: string, description?: string) => Promise<void>;
   closeVote: () => Promise<void>;
   resetVotes: () => Promise<void>;
   castVote: (memberId: string, decision: VoteDecision) => Promise<void>;
@@ -177,7 +177,7 @@ export function VotingStoreProvider({
 
         await refresh();
       },
-      openVote: async (title, description) => {
+      openVote: async (sessionNumber, title, description) => {
         const closeOpen = await supabase
           .from("vote_sessions")
           .update({ is_open: false })
@@ -189,6 +189,7 @@ export function VotingStoreProvider({
         }
 
         const insertVote = await supabase.from("vote_sessions").insert({
+          session_number: sessionNumber.trim() || null,
           title: title.trim() || "Nueva votacion",
           description: description?.trim() || "Sin descripcion adicional.",
           is_open: true,

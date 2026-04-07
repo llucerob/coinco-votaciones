@@ -9,6 +9,7 @@ export interface CouncilMember {
 
 export interface VoteItem {
   id: string;
+  sessionNumber?: string;
   title: string;
   description?: string;
   isOpen: boolean;

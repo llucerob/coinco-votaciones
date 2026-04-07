@@ -48,7 +48,9 @@ export default function ObsResults() {
       <div className="mx-auto flex min-h-[650px] w-full max-w-[1180px] flex-col justify-between">
         <div className="max-w-4xl rounded-[26px] border border-white/12 bg-[#003169] px-5 py-4 shadow-[0_18px_50px_rgba(0,0,0,0.24)]">
           <p className="text-sm uppercase tracking-[0.4em] text-[var(--color-muted)]">
-            Concejo Municipal de Coinco
+            {currentVote.sessionNumber
+              ? `Sesion ${currentVote.sessionNumber} I. Municipalidad de Coinco`
+              : "I. Municipalidad de Coinco"}
           </p>
           <h1 className="mt-3 text-3xl font-semibold leading-tight text-white md:text-4xl">
             {currentVote.title}

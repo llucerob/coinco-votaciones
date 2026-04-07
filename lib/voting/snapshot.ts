@@ -14,7 +14,7 @@ export async function loadVotingSnapshot(supabase: SupabaseLike): Promise<Voting
 
   const voteQuery = supabase
     .from("vote_sessions")
-    .select("id, title, description, is_open, created_at")
+    .select("id, session_number, title, description, is_open, created_at")
     .order("created_at", { ascending: false })
     .limit(1)
     .maybeSingle();
@@ -29,6 +29,7 @@ export async function loadVotingSnapshot(supabase: SupabaseLike): Promise<Voting
     voteResult.data && voteResult.data.id
       ? {
           id: voteResult.data.id,
+          sessionNumber: voteResult.data.session_number ?? "",
           title: voteResult.data.title,
           description: voteResult.data.description ?? "",
           isOpen: voteResult.data.is_open,

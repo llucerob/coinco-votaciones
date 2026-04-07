@@ -40,6 +40,7 @@ export const initialMembers: CouncilMember[] = [
 
 export const initialVoteItem: VoteItem = {
   id: "votacion-actual",
+  sessionNumber: "",
   title: "Sin votacion activa",
   description: "El administrador debe abrir una nueva votacion.",
   isOpen: false,

@@ -9,12 +9,16 @@ create table if not exists public.council_members (
 
 create table if not exists public.vote_sessions (
   id uuid primary key default gen_random_uuid(),
+  session_number text,
   title text not null,
   description text,
   is_open boolean not null default false,
   created_at timestamptz not null default now(),
   created_by uuid references auth.users (id) on delete set null
 );
+
+alter table public.vote_sessions
+add column if not exists session_number text;
 
 create table if not exists public.profiles (
   id uuid primary key references auth.users (id) on delete cascade,

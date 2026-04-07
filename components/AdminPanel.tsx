@@ -23,6 +23,7 @@ export default function AdminPanel() {
     clearError,
     syncing,
   } = useVotingStore();
+  const [sessionNumber, setSessionNumber] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [memberDrafts, setMemberDrafts] = useState<Record<string, MemberDraft>>({});
@@ -98,7 +99,16 @@ export default function AdminPanel() {
           </div>
         </div>
 
-        <div className="mt-6 grid gap-4 md:grid-cols-2">
+        <div className="mt-6 grid gap-4 md:grid-cols-3">
+          <label className="grid gap-2">
+            <span className="text-sm text-white/70">Nro. de sesion</span>
+            <input
+              value={sessionNumber}
+              onChange={(event) => setSessionNumber(event.target.value)}
+              placeholder="Ej. 24"
+              className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-[var(--color-accent)]"
+            />
+          </label>
           <label className="grid gap-2">
             <span className="text-sm text-white/70">Titulo</span>
             <input
@@ -128,7 +138,7 @@ export default function AdminPanel() {
         <div className="mt-6 flex flex-wrap gap-3">
           <button
             type="button"
-            onClick={() => run(() => openVote(title || "Nueva votacion", description))}
+            onClick={() => run(() => openVote(sessionNumber, title || "Nueva votacion", description))}
             disabled={isPending}
             className="rounded-2xl bg-[var(--color-accent)] px-5 py-3 font-semibold text-[#0a1117] transition hover:brightness-110 disabled:opacity-60"
           >
