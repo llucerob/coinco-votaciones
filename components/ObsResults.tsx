@@ -92,7 +92,7 @@ function PresidentCard({
     APRUEBO: "Apruebo",
     RECHAZO: "Rechazo",
     ABSTENCION: "Abstencion",
-    SIN_VOTO: "Sin voto",
+    SIN_VOTO: "Ausente o Sin Voto",
   } satisfies Record<VoteDecision, string>;
 
   return (
