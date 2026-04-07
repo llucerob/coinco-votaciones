@@ -23,23 +23,20 @@ export default function ObsResults() {
     abstencion: membersWithVotes.filter((member) => member.decision === "ABSTENCION").length,
     sinVoto: membersWithVotes.filter((member) => member.decision === "SIN_VOTO").length,
   };
-  const orderedMembers = [
-    ...membersWithVotes.filter((member) => member.id === "presidente"),
-    ...membersWithVotes.filter((member) => member.id !== "presidente"),
-  ];
-  const president = orderedMembers[0]?.id === "presidente" ? orderedMembers[0] : undefined;
+  const president = membersWithVotes.find((member) => member.id === "presidente");
+  const councilMembers = membersWithVotes.filter((member) => member.id !== "presidente");
 
   return (
     <main className="min-h-screen bg-transparent px-4 py-4 md:px-6">
-      <div className="mx-auto flex min-h-[680px] w-full max-w-[1280px] flex-col justify-between">
-        <div className="max-w-4xl rounded-[28px] border border-white/10 bg-[rgba(8,13,18,0.42)] px-6 py-5 shadow-[0_20px_60px_rgba(0,0,0,0.26)] backdrop-blur-md">
+      <div className="mx-auto flex min-h-[650px] w-full max-w-[1180px] flex-col justify-between">
+        <div className="max-w-4xl rounded-[26px] border border-white/10 bg-[rgba(8,13,18,0.42)] px-5 py-4 shadow-[0_18px_50px_rgba(0,0,0,0.24)] backdrop-blur-md">
           <p className="text-sm uppercase tracking-[0.4em] text-[var(--color-muted)]">
             Concejo Municipal de Coinco
           </p>
-          <h1 className="mt-3 text-3xl font-semibold leading-tight text-white md:text-5xl">
+          <h1 className="mt-3 text-3xl font-semibold leading-tight text-white md:text-4xl">
             {currentVote.title}
           </h1>
-          <p className="mt-3 max-w-3xl text-base leading-7 text-white/70 md:text-lg">
+          <p className="mt-3 max-w-3xl text-sm leading-7 text-white/70 md:text-base">
             {currentVote.description}
           </p>
         </div>
@@ -48,27 +45,78 @@ export default function ObsResults() {
           {syncing ? "Actualizando desde Supabase..." : "Sincronizacion en tiempo real activa"}
         </div>
 
-        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
-          {orderedMembers.map((member) => (
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+          {councilMembers.map((member) => (
             <CouncilCard key={member.id} member={member} decision={member.decision} />
           ))}
         </div>
 
         {president ? (
-          <div className="mt-4 rounded-[26px] border border-white/15 bg-[rgba(18,28,36,0.28)] p-4 shadow-[0_20px_50px_rgba(0,0,0,0.24)] backdrop-blur-xl">
-            <p className="text-sm uppercase tracking-[0.28em] text-[var(--color-muted)]">
-              Resumen de la votacion
-            </p>
-            <div className="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-              <StatCard label="Apruebo" value={summary.apruebo} tone="emerald" />
-              <StatCard label="Rechazo" value={summary.rechazo} tone="rose" />
-              <StatCard label="Abstencion" value={summary.abstencion} tone="amber" />
-              <StatCard label="Ausente o Sin Voto" value={summary.sinVoto} tone="neutral" />
+          <div className="mt-4 grid gap-4 xl:grid-cols-[240px_1fr]">
+            <PresidentCard member={president} />
+            <div className="rounded-[24px] border border-white/15 bg-[rgba(18,28,36,0.28)] p-4 shadow-[0_20px_50px_rgba(0,0,0,0.24)] backdrop-blur-xl">
+              <p className="text-sm uppercase tracking-[0.28em] text-[var(--color-muted)]">
+                Resumen de la votacion
+              </p>
+              <div className="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                <StatCard label="Apruebo" value={summary.apruebo} tone="emerald" />
+                <StatCard label="Rechazo" value={summary.rechazo} tone="rose" />
+                <StatCard label="Abstencion" value={summary.abstencion} tone="amber" />
+                <StatCard label="Ausente o Sin Voto" value={summary.sinVoto} tone="neutral" />
+              </div>
             </div>
           </div>
         ) : null}
       </div>
     </main>
+  );
+}
+
+function PresidentCard({
+  member,
+}: {
+  member: {
+    id: string;
+    name: string;
+    image: string;
+    decision: VoteDecision;
+  };
+}) {
+  return (
+    <div className="rounded-[24px] border border-white/10 bg-[rgba(7,12,18,0.56)] p-3 text-center shadow-[0_18px_40px_rgba(0,0,0,0.22)] backdrop-blur-md">
+      <p className="text-[11px] uppercase tracking-[0.2em] text-[var(--color-muted)]">Presidencia</p>
+      <img
+        src={member.image}
+        alt={member.name}
+        className="mx-auto mt-3 h-20 w-20 rounded-[18px] border border-white/15 object-cover"
+      />
+      <h3 className="mt-3 text-base font-semibold leading-tight text-white">{member.name}</h3>
+      <div className="mt-3">
+        <StatBadge decision={member.decision} />
+      </div>
+    </div>
+  );
+}
+
+function StatBadge({ decision }: { decision: VoteDecision }) {
+  const labelMap = {
+    APRUEBO: "Apruebo",
+    RECHAZO: "Rechazo",
+    ABSTENCION: "Abstencion",
+    SIN_VOTO: "Sin voto",
+  } satisfies Record<VoteDecision, string>;
+
+  const classMap = {
+    APRUEBO: "border-emerald-400/50 bg-emerald-500/12 text-emerald-200",
+    RECHAZO: "border-rose-400/50 bg-rose-500/12 text-rose-200",
+    ABSTENCION: "border-amber-300/50 bg-amber-400/12 text-amber-100",
+    SIN_VOTO: "border-white/10 bg-white/5 text-white/70",
+  } satisfies Record<VoteDecision, string>;
+
+  return (
+    <div className={`rounded-xl border px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] ${classMap[decision]}`}>
+      {labelMap[decision]}
+    </div>
   );
 }
 
