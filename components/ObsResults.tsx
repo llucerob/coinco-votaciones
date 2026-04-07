@@ -39,6 +39,7 @@ export default function ObsResults() {
     abstencion: membersWithVotes.filter((member) => member.decision === "ABSTENCION").length,
     sinVoto: membersWithVotes.filter((member) => member.decision === "SIN_VOTO").length,
   };
+  const totalVotacion = summary.apruebo + summary.rechazo + summary.abstencion;
   const president = membersWithVotes.find((member) => member.id === "presidente");
   const councilMembers = membersWithVotes.filter((member) => member.id !== "presidente");
 
@@ -78,7 +79,7 @@ export default function ObsResults() {
                 <StatCard label="Apruebo" value={summary.apruebo} tone="emerald" />
                 <StatCard label="Rechazo" value={summary.rechazo} tone="rose" />
                 <StatCard label="Abstencion" value={summary.abstencion} tone="amber" />
-                <StatCard label="Ausente o Sin Voto" value={summary.sinVoto} tone="neutral" />
+                <StatCard label="Total votacion" value={totalVotacion} tone="neutral" />
               </div>
             </div>
           </div>
