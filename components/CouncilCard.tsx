@@ -24,7 +24,7 @@ export default function CouncilCard({
   decision: VoteDecision;
 }) {
   return (
-    <article className="rounded-[24px] border border-white/10 bg-[rgba(7,12,18,0.56)] p-3 text-center shadow-[0_18px_40px_rgba(0,0,0,0.22)] backdrop-blur-md">
+    <article className="rounded-[24px] border border-white/10 bg-[#0c141c] p-3 text-center shadow-[0_18px_40px_rgba(0,0,0,0.22)]">
       <img
         src={member.image}
         alt={member.name}
