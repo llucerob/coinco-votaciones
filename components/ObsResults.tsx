@@ -1,11 +1,27 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
+import { useEffect } from "react";
 import CouncilCard from "@/components/CouncilCard";
 import { useVotingStore } from "@/store/voting-store";
 import type { VoteDecision } from "@/types";
 
 export default function ObsResults() {
   const { members, records, currentVote, syncing } = useVotingStore();
+
+  useEffect(() => {
+    const html = document.documentElement;
+    const body = document.body;
+    const previousHtmlBackground = html.style.background;
+    const previousBodyBackground = body.style.background;
+
+    html.style.background = "transparent";
+    body.style.background = "transparent";
+
+    return () => {
+      html.style.background = previousHtmlBackground;
+      body.style.background = previousBodyBackground;
+    };
+  }, []);
 
   const membersWithVotes = members.map((member) => {
     const record = records.find((item) => item.memberId === member.id);
