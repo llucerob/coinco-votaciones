@@ -1,5 +1,4 @@
 import ObsResults from "@/components/ObsResults";
-import Header from "@/components/Header";
 import { createClient } from "@/lib/supabase/server";
 import { loadVotingSnapshot } from "@/lib/voting/snapshot";
 import { VotingStoreProvider } from "@/store/voting-store";
@@ -13,11 +12,8 @@ export default async function ObsPage() {
   }
 
   return (
-    <>
-      <Header />
-      <VotingStoreProvider initialSnapshot={snapshot}>
-        <ObsResults />
-      </VotingStoreProvider>
-    </>
+    <VotingStoreProvider initialSnapshot={snapshot}>
+      <ObsResults />
+    </VotingStoreProvider>
   );
 }
