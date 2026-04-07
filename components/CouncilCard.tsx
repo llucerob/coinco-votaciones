@@ -10,9 +10,9 @@ const labelMap: Record<VoteDecision, string> = {
 };
 
 const classMap: Record<VoteDecision, string> = {
-  APRUEBO: "border-emerald-400/50 bg-emerald-500/12 text-emerald-200",
-  RECHAZO: "border-rose-400/50 bg-rose-500/12 text-rose-200",
-  ABSTENCION: "border-amber-300/50 bg-amber-400/12 text-amber-100",
+  APRUEBO: "border-[#00A97A] bg-[#00A97A] text-white",
+  RECHAZO: "border-[#00A97A] bg-[#00A97A] text-white",
+  ABSTENCION: "border-[#00A97A] bg-[#00A97A] text-white",
   SIN_VOTO: "border-white/10 bg-white/5 text-white/70",
 };
 
@@ -24,7 +24,7 @@ export default function CouncilCard({
   decision: VoteDecision;
 }) {
   return (
-    <article className="rounded-[24px] border border-white/10 bg-[#0c141c] p-3 text-center shadow-[0_18px_40px_rgba(0,0,0,0.22)]">
+    <article className="rounded-[24px] border border-white/10 bg-[#003169] p-3 text-center shadow-[0_18px_40px_rgba(0,0,0,0.22)]">
       <img
         src={member.image}
         alt={member.name}

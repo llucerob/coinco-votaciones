@@ -45,7 +45,7 @@ export default function ObsResults() {
   return (
     <main className="min-h-screen bg-transparent px-4 py-4 md:px-6">
       <div className="mx-auto flex min-h-[650px] w-full max-w-[1180px] flex-col justify-between">
-        <div className="max-w-4xl rounded-[26px] border border-white/12 bg-[#0c141c] px-5 py-4 shadow-[0_18px_50px_rgba(0,0,0,0.24)]">
+        <div className="max-w-4xl rounded-[26px] border border-white/12 bg-[#003169] px-5 py-4 shadow-[0_18px_50px_rgba(0,0,0,0.24)]">
           <p className="text-sm uppercase tracking-[0.4em] text-[var(--color-muted)]">
             Concejo Municipal de Coinco
           </p>
@@ -70,7 +70,7 @@ export default function ObsResults() {
         {president ? (
           <div className="mt-4 grid gap-4 xl:grid-cols-[240px_1fr]">
             <PresidentCard member={president} />
-            <div className="rounded-[24px] border border-white/15 bg-[#16222c] p-4 shadow-[0_20px_50px_rgba(0,0,0,0.24)]">
+            <div className="rounded-[24px] border border-white/15 bg-[#003169] p-4 shadow-[0_20px_50px_rgba(0,0,0,0.24)]">
               <p className="text-sm uppercase tracking-[0.28em] text-[var(--color-muted)]">
                 Resumen de la votacion
               </p>
@@ -99,7 +99,7 @@ function PresidentCard({
   };
 }) {
   return (
-    <div className="rounded-[24px] border border-white/10 bg-[rgba(7,12,18,0.56)] p-3 text-center shadow-[0_18px_40px_rgba(0,0,0,0.22)] backdrop-blur-md">
+    <div className="rounded-[24px] border border-white/10 bg-[#003169] p-3 text-center shadow-[0_18px_40px_rgba(0,0,0,0.22)] backdrop-blur-md">
       <p className="text-[11px] uppercase tracking-[0.2em] text-[var(--color-muted)]">Presidencia</p>
       <img
         src={member.image}
@@ -123,9 +123,9 @@ function StatBadge({ decision }: { decision: VoteDecision }) {
   } satisfies Record<VoteDecision, string>;
 
   const classMap = {
-    APRUEBO: "border-emerald-400/50 bg-emerald-500/12 text-emerald-200",
-    RECHAZO: "border-rose-400/50 bg-rose-500/12 text-rose-200",
-    ABSTENCION: "border-amber-300/50 bg-amber-400/12 text-amber-100",
+    APRUEBO: "border-[#00A97A] bg-[#00A97A] text-white",
+    RECHAZO: "border-[#00A97A] bg-[#00A97A] text-white",
+    ABSTENCION: "border-[#00A97A] bg-[#00A97A] text-white",
     SIN_VOTO: "border-white/10 bg-white/5 text-white/70",
   } satisfies Record<VoteDecision, string>;
 
@@ -146,9 +146,9 @@ function StatCard({
   tone: "emerald" | "rose" | "amber" | "neutral";
 }) {
   const classes = {
-    emerald: "border-emerald-400/40 bg-emerald-500/12 text-emerald-100",
-    rose: "border-rose-400/40 bg-rose-500/12 text-rose-100",
-    amber: "border-amber-300/40 bg-amber-400/12 text-amber-100",
+    emerald: "border-[#00A97A] bg-[#00A97A] text-white",
+    rose: "border-[#00A97A] bg-[#00A97A] text-white",
+    amber: "border-[#00A97A] bg-[#00A97A] text-white",
     neutral: "border-white/10 bg-[rgba(255,255,255,0.06)] text-white",
   };
 
