@@ -34,6 +34,7 @@ interface VotingContextValue extends VotingState {
   refresh: () => Promise<void>;
   clearError: () => void;
   updateMember: (id: string, payload: Partial<CouncilMember>) => Promise<void>;
+  uploadMemberImage: (id: string, file: File) => Promise<void>;
   openVote: (title: string, description?: string) => Promise<void>;
   closeVote: () => Promise<void>;
   resetVotes: () => Promise<void>;
@@ -41,6 +42,7 @@ interface VotingContextValue extends VotingState {
 }
 
 const VotingContext = createContext<VotingContextValue | null>(null);
+const MEMBER_IMAGES_BUCKET = "member-images";
 
 function getFriendlyVoteError(message: string) {
   const normalized = message.toLowerCase();
@@ -141,6 +143,32 @@ export function VotingStoreProvider({
       clearError: () => setState((current) => ({ ...current, error: null })),
       updateMember: async (id, payload) => {
         const { error } = await supabase.from("council_members").update(payload).eq("id", id);
+
+        if (error) {
+          setState((current) => ({ ...current, error: error.message }));
+          return;
+        }
+
+        await refresh();
+      },
+      uploadMemberImage: async (id, file) => {
+        const extension = file.name.includes(".") ? file.name.split(".").pop() : "png";
+        const path = `${id}/${Date.now()}.${extension}`;
+        const uploadResult = await supabase.storage.from(MEMBER_IMAGES_BUCKET).upload(path, file, {
+          cacheControl: "3600",
+          upsert: true,
+          contentType: file.type || "image/png",
+        });
+
+        if (uploadResult.error) {
+          setState((current) => ({ ...current, error: uploadResult.error.message }));
+          return;
+        }
+
+        const publicUrlResult = supabase.storage.from(MEMBER_IMAGES_BUCKET).getPublicUrl(path);
+        const image = publicUrlResult.data.publicUrl;
+
+        const { error } = await supabase.from("council_members").update({ image }).eq("id", id);
 
         if (error) {
           setState((current) => ({ ...current, error: error.message }));

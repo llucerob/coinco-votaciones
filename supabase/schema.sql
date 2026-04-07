@@ -110,3 +110,25 @@ values
   ('concejal-6', 'Concejal 6', 'https://placehold.co/320x320/0f172a/f8fafc?text=Concejal+6'),
   ('presidente', 'Presidente', 'https://placehold.co/320x320/0f172a/f8fafc?text=Presidente')
 on conflict (id) do nothing;
+
+insert into storage.buckets (id, name, public)
+values ('member-images', 'member-images', true)
+on conflict (id) do nothing;
+
+create policy "public read member images"
+on storage.objects
+for select
+using (bucket_id = 'member-images');
+
+create policy "admin upload member images"
+on storage.objects
+for insert
+to authenticated
+with check (bucket_id = 'member-images' and public.current_role() = 'admin');
+
+create policy "admin update member images"
+on storage.objects
+for update
+to authenticated
+using (bucket_id = 'member-images' and public.current_role() = 'admin')
+with check (bucket_id = 'member-images' and public.current_role() = 'admin');

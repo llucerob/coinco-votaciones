@@ -28,7 +28,7 @@ export default function CouncilCard({
       <img
         src={member.image}
         alt={member.name}
-        className="mx-auto mb-3 h-20 w-20 rounded-[18px] border border-white/15 object-cover"
+        className="mx-auto mb-3 h-24 w-24 rounded-[20px] border border-white/15 object-cover"
       />
       <h3 className="flex min-h-12 items-center justify-center text-base font-semibold leading-tight text-white">
         {member.name}

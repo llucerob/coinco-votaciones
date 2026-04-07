@@ -16,6 +16,7 @@ export default function AdminPanel() {
     closeVote,
     resetVotes,
     updateMember,
+    uploadMemberImage,
     currentVote,
     records,
     error,
@@ -25,6 +26,7 @@ export default function AdminPanel() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [memberDrafts, setMemberDrafts] = useState<Record<string, MemberDraft>>({});
+  const [selectedFiles, setSelectedFiles] = useState<Record<string, File | null>>({});
   const [isPending, startTransition] = useTransition();
 
   const run = (callback: () => Promise<void>) => {
@@ -48,19 +50,29 @@ export default function AdminPanel() {
   const saveMember = (memberId: string) => {
     const member = members.find((item) => item.id === memberId);
     const draft = memberDrafts[memberId];
+    const file = selectedFiles[memberId];
 
     if (!member) {
       return;
     }
 
-    run(() =>
-      updateMember(memberId, {
+    run(async () => {
+      await updateMember(memberId, {
         name: (draft?.name ?? member.name).trim(),
-        image: (draft?.image ?? member.image).trim(),
-      }),
-    );
+      });
+
+      if (file) {
+        await uploadMemberImage(memberId, file);
+      }
+    });
 
     setMemberDrafts((current) => {
+      const next = { ...current };
+      delete next[memberId];
+      return next;
+    });
+
+    setSelectedFiles((current) => {
       const next = { ...current };
       delete next[memberId];
       return next;
@@ -166,15 +178,25 @@ export default function AdminPanel() {
                   className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-[var(--color-accent)]"
                 />
               </label>
-              <label className="grid gap-2">
+              <div className="grid gap-2">
                 <span className="text-sm text-white/65">Imagen</span>
-                <input
-                  value={memberDrafts[member.id]?.image ?? member.image}
-                  onChange={(event) => updateDraft(member.id, "image", event.target.value)}
-                  placeholder="URL de imagen"
-                  className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3 text-white outline-none transition focus:border-[var(--color-accent)]"
-                />
-              </label>
+                <label className="rounded-2xl border border-dashed border-white/15 bg-black/25 px-4 py-3 text-sm text-white/75 transition hover:border-[var(--color-accent)]">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(event) => {
+                      const file = event.target.files?.[0] ?? null;
+                      setSelectedFiles((current) => ({
+                        ...current,
+                        [member.id]: file,
+                      }));
+                    }}
+                  />
+                  {selectedFiles[member.id]?.name ?? "Seleccionar imagen"}
+                </label>
+                <p className="text-xs text-white/50">La imagen se almacena en Supabase Storage.</p>
+              </div>
               <div className="flex items-end">
                 <button
                   type="button"

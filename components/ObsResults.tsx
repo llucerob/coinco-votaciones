@@ -1,5 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
-
 import CouncilCard from "@/components/CouncilCard";
 import { useVotingStore } from "@/store/voting-store";
 import type { VoteDecision } from "@/types";
@@ -88,7 +88,7 @@ function PresidentCard({
       <img
         src={member.image}
         alt={member.name}
-        className="mx-auto mt-3 h-20 w-20 rounded-[18px] border border-white/15 object-cover"
+        className="mx-auto mt-3 h-24 w-24 rounded-[20px] border border-white/15 object-cover"
       />
       <h3 className="mt-3 text-base font-semibold leading-tight text-white">{member.name}</h3>
       <div className="mt-3">
